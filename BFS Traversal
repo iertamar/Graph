@@ -1,0 +1,62 @@
+import java.io.*;
+import java.util.*;
+
+class Graph{
+    int v;
+    LinkedList<Integer> a[];
+
+     Graph(int v)
+    {
+        this.v = v;
+        a = new LinkedList[v];
+        for (int i =0; i<v ; i++)
+            a[i] = new LinkedList<>();
+    }
+
+    void addEdge( int src , int dest)
+    {
+        a[src].addFirst(dest);
+        //g.a[dest].addFirst(src);
+    }
+
+    void bfs(int s)
+    {
+        boolean visited[] = new boolean[v];
+        Queue<Integer> q = new LinkedList<>();
+        visited[s] = true;
+        q.add(s);
+        while(q.size()!=0)
+        {
+            s = q.poll();
+            System.out.print(s+" ");
+            Iterator<Integer> i = a[s].listIterator();
+            while(i.hasNext())
+            {
+                int n = i.next();
+                if (!visited[n])
+                {
+                    visited[n] = true;
+                    q.add(n);
+                }
+            }
+        }
+    }
+
+    public static void main(String args[])
+    {
+        Graph g = new Graph(4);
+
+        g.addEdge(0, 1);
+        g.addEdge(0, 2);
+        g.addEdge(1, 2);
+        g.addEdge(2, 0);
+        g.addEdge(2, 3);
+        g.addEdge(3, 3);
+
+        System.out.println("Following is Breadth First Traversal "+
+                "(starting from vertex 2)");
+
+        g.bfs(0);
+    }
+
+}
