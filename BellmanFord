@@ -1,0 +1,92 @@
+package graph;
+
+import java.util.Scanner;
+
+class Edge
+{
+    int src , dest , weight;
+    Edge()
+    {
+        src = dest = weight = 0;
+    }
+}
+
+public class BellmanFord {
+    int E , V;
+    Edge edge[];
+    BellmanFord(int v , int e)
+    {
+        this.V = v;
+        this.E = e;
+        edge = new Edge[e];
+        for(int i = 0; i<e ; i++)
+        {
+            edge[i] = new Edge();
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("enter vertices");
+        int v = sc.nextInt();
+        System.out.println("enter edges");
+        int e = sc.nextInt();
+
+        BellmanFord bf = new BellmanFord(v , e);
+
+        System.out.println("enter graph: src , dest  , weight ");
+        for(int i =0; i<e; i++)
+        {
+            bf.edge[i].src    =  sc.nextInt();
+            bf.edge[i].dest   =  sc.nextInt();
+            bf.edge[i].weight =  sc.nextInt();
+        }
+
+        bf.bellman(bf , 0);
+    }
+    void bellman(BellmanFord bf , int src)
+    {
+        int v = bf.V , e = bf.E;
+        int dist[] = new int[v];
+// STEP @1
+        for (int i =0; i<v; i++)
+            dist[i] = Integer.MAX_VALUE;
+
+        dist[src] = 0;
+// STEP @2
+
+        for (int i = 0; i<v-1 ; i++)
+        {
+            for (int j = 0; j<e ; j++)
+            {
+                int s = bf.edge[j].src;
+                int d = bf.edge[j].dest;
+                int w = bf.edge[j].weight;
+                if (dist[s]!=Integer.MAX_VALUE && dist[d]> dist[s]+w)
+                    dist[d] = dist[s] + w;
+            }
+        }
+
+        //STEP @3
+
+        for (int j = 0; j<e ; j++)
+        {
+            int s = bf.edge[j].src;
+            int d = bf.edge[j].dest;
+            int w = bf.edge[j].weight;
+            if (dist[s]!=Integer.MAX_VALUE && dist[d]> dist[s]+w) {
+                dist[d] = Integer.MIN_VALUE;
+                System.out.println("Graph contains negative weight cycle ");
+            }
+        }
+
+        printArr(dist , v);
+
+    }
+
+    void printArr(int dist[] , int v)
+    {
+        System.out.println(" Vertex Distance From Source ");
+        for (int i =0; i<v ; i++)
+            System.out.println(i + "  " + dist[i]);
+    }
+}
