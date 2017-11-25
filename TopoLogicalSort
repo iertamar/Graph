@@ -1,0 +1,63 @@
+package graph;
+
+import java.util.*;
+
+public class TopologicalSort {
+    LinkedList<Integer> adj[];
+    int v ;
+
+    TopologicalSort(int v)
+    {
+        this.v = v;
+        adj = new LinkedList[v];
+        for(int i = 0; i<v ;i++)
+        {
+            adj[i] = new LinkedList();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int v = sc.nextInt();
+        int e = sc.nextInt();
+        TopologicalSort ts = new TopologicalSort(v);
+        for(int i =0; i<e ; i++)
+        {
+            int src = sc.nextInt();
+            int dest = sc.nextInt();
+            ts.addEdge(src , dest);
+        }
+        ts.topological();
+    }
+    void addEdge(int s , int d)
+    {
+        adj[s].add(d);
+    }
+    void topological()
+    {
+        Stack<Integer> stack = new Stack<>();
+        boolean visited[] = new boolean[v];
+        for (int i =0; i<v ;i++)
+            visited[i] = false;
+
+        for (int i =0; i<v ; i++)
+        {
+            if(visited[i]==false)
+                topologicalUtil(i , visited , stack);
+        }
+        while (stack.empty()==false)
+            System.out.print(stack.pop() + " ");
+    }
+    void topologicalUtil(int src , boolean visited[] , Stack s)
+    {
+        visited[src] = true;
+        Iterator itr = adj[src].iterator();
+        while(itr.hasNext())
+        {
+            int x = (Integer) itr.next();
+            if(!visited[x])
+                topologicalUtil(x , visited , s);
+        }
+        s.push(src);
+    }
+}
